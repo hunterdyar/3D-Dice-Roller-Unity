@@ -37,7 +37,7 @@ namespace HDyar.DiceRoller
 
 			foreach (var dice in LastRolledDice)
 			{
-				if (dice.gameObject != null)
+				if (dice != null)
 				{
 					Destroy(dice.gameObject);
 				}
