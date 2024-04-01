@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5610369717108689875}
   - component: {fileID: 3097280729231236271}
   - component: {fileID: 7980480799833395929}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: d10_Percent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 717689634494448474}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 7.08067, y: 0, z: 4.242193}
-  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -171,3 +171,4 @@ MonoBehaviour:
     ModelNormal: {x: -0.3507556, y: -0.0060442686, z: 0.93644756}
   currentUpFace: {fileID: 0}
   stillTime: 0
+  isStill: 0

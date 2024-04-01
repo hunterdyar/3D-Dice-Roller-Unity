@@ -12,7 +12,7 @@ namespace HDyar.DiceRoller
 	[RequireComponent(typeof(Rigidbody))]
 	public class Dice : MonoBehaviour
 	{
-		[Tooltip("Check velocity and update up-face whenever not in motion, continuously.")]
+		[Tooltip("Check velocity and update up-face whenever not in motion, continuously. IsStill is only ensured to be useful if this is true.")]
 		[FormerlySerializedAs("rolling")] public bool activeRolling = true;
 		public int Sides => _faces.Count;
 		[SerializeField] 
@@ -24,6 +24,7 @@ namespace HDyar.DiceRoller
 		private DiceFace highestValueFace; 
 		[SerializeField] private float stillTime;
 		private float _currentstillTime;
+		public bool isStill;
 		private void Awake()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
@@ -31,7 +32,6 @@ namespace HDyar.DiceRoller
 
 		private void Start()
 		{
-			currentUpFace = GetWorldUpFace();
 		}
 
 		public DiceFace GetWorldUpFace()
@@ -68,10 +68,12 @@ namespace HDyar.DiceRoller
 						currentUpFace = GetWorldUpFace();
 						//is it worth it to cache the orientation and only start checking again if it changes?
 						_currentstillTime = 0;
+						isStill = true;
 					}
 				}
 				else
 				{
+					isStill = false;
 					_currentstillTime = 0;
 				}
 			}
@@ -85,6 +87,8 @@ namespace HDyar.DiceRoller
 
 		public void Roll(Vector3 throwForce, Vector3 spinForce)
 		{
+			isStill = false;
+			currentUpFace = null;
 			_rigidbody.AddForce(throwForce,ForceMode.Impulse);
 			_rigidbody.AddTorque(spinForce,ForceMode.Impulse);
 			_currentstillTime = 0;
@@ -97,6 +101,12 @@ namespace HDyar.DiceRoller
 			var closestAligned = _faces.OrderByDescending(x => Vector3.Dot(x.ModelNormal, dir)).First();
 			//current normal, find closest normal from diceFaceOnModel list.
 			return closestAligned.Face;
+		}
+
+		[ContextMenu("Sort")]
+		public void SortFaces()
+		{
+			_faces.OrderBy(x => x.Face.Value);
 		}
 	}
 }

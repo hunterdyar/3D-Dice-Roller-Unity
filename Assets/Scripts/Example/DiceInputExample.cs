@@ -1,32 +1,24 @@
 ﻿using System;
+using System.Collections;
 using HDyar.DiceRoller.RollCodeParser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace HDyar.DiceRoller.Example
 {
 	public class DiceInputExample : MonoBehaviour
 	{
 		private TMP_InputField _inputField;
-
+		[FormerlySerializedAs("_roller")] [SerializeField] private RollDiceFromCode fromCode;//in this namespace, diceRoller is the unity thing.
 		private void Awake()
 		{
 			_inputField = GetComponent<TMP_InputField>();
-			_inputField.onSubmit.AddListener(Roll);	
 		}
 
 		public void Roll()
 		{
-			Roll(_inputField.text);	
-		}
-
-		public void Roll(string code)
-		{
-			var roll = new RollCode(code);
-			var e = new Evaluator();
-			var result = e.Evaluate(roll);
-			Debug.Log($"Result: {result.Total}");
-			
+			fromCode.Roll(_inputField.text);	
 		}
 	}
 }

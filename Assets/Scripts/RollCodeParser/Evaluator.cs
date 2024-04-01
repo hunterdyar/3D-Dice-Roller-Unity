@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -7,82 +9,72 @@ namespace HDyar.DiceRoller.RollCodeParser
 {
 	public class Evaluator
 	{
-		public DiceResult result;
+		public DiceResult Result => _result;
+		private DiceResult _result;
+		private readonly MonoBehaviour _context;
+		public IDiceRoller Roller => _roller;
+		private readonly IDiceRoller _roller;
 
-		public delegate int RollOneDiceFunctionDelegate(int numDice);
-
-		public RollOneDiceFunctionDelegate RollFunction = DefaultRoll;
-
-		public DiceResult Evaluate(RollCode code, RollOneDiceFunctionDelegate rollFunction = null)
+		public Evaluator(IDiceRoller roller, MonoBehaviour context)
 		{
-			if (rollFunction != null)
+			this._roller = roller;
+			this._context = context;
+		}
+		
+		public DiceResult Evaluate(RollCode code)
+		{
+			_result = new DiceResult();
+			foreach (var expr in code.Expression)
 			{
-				RollFunction = rollFunction;
+				Coroutine routine = _context.StartCoroutine(Evaluate(expr,_result));
 			}
-			
-			result = new DiceResult();
-			foreach (var rootExpression in code.Expression)
-			{
-				result.AddResult(Evaluate(rootExpression));
-			}
-
-			return result;
+			return _result;
 		}
 
-		public DiceResult Evaluate(Expression exp)
+		public IEnumerator Evaluate(Expression exp, DiceResult result)
 		{
+			//todo: yield for evaluation of result.
 			if (exp is DiceRollExpression dre)
 			{
-				result = new DiceResult();
 				var numDice = GetValueFromExpression(dre.NumberDice);
 				var numFaces = GetValueFromExpression(dre.NumberFaces);
-				for (int i = 0; i < numDice; i++)
-				{
-					int r = RollFunction(numFaces);
-					result.Rolls.Add((r,numFaces));
-				}
-				return result;
-
+				yield return _context.StartCoroutine(_roller.RollDice(numDice, numFaces, result));
 			}else if (exp is ModifierExpression mod)
 			{
 				if (mod.Modifier == Modifier.Add)
 				{
-					var m = new DiceResult();
-					m.ModifierTotal += GetValueFromExpression(mod.Expression);
-					return m;
+					result.ModifierTotal += GetValueFromExpression(mod.Expression);
 				}else if (mod.Modifier == Modifier.Subtract)
 				{
-					var m = new DiceResult();
-					m.ModifierTotal -= GetValueFromExpression(mod.Expression);
-					return m;
+					result.ModifierTotal -= GetValueFromExpression(mod.Expression);
 				}
 				else
 				{
 					Debug.LogError("multiply or divide not currently supported");
-					return new DiceResult();
+					yield break;
 				}
 			}else if (exp is ExpressionGroup group)
 			{
-				var result = new DiceResult();
+				var subResult = new DiceResult();
 				foreach (var e in group.Expressions)
 				{
-					result.AddResult(Evaluate(e));
+					//todo: make these concurent with Task.WhenAll
+					yield return _context.StartCoroutine(Evaluate(e,subResult));
 				}
-
-				return result;
+				//return sub-result? i lost the plot but this is boilerplate until I parse groups.
+				result.AddResult(subResult);
+				yield break;
 			}
 			else
 			{
 				Debug.LogError("Invalid Root Expression");
 			}
-
-			return null;
 		}
 
-		private static int DefaultRoll(int numFaces)
-		{
-			return Random.Range(1, numFaces + 1);
-		}
+		// private static int DefaultRoll(int numFaces)
+		// {
+		// 	return Random.Range(1, numFaces + 1);
+		// }
 
 		public int GetValueFromExpression(Expression exp)
 		{
@@ -92,7 +84,10 @@ namespace HDyar.DiceRoller.RollCodeParser
 			}
 			else
 			{
-				var r = Evaluate(exp);
+				//todo: We have to yield here!
+				var r = new DiceResult();
+				Evaluate(exp,r);
+				// while(r.WaitingForResults)....
 				return r.Total;
 			}
 		}

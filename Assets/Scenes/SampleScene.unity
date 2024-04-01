@@ -257,6 +257,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 166702294}
   m_CullTransparentMesh: 1
+--- !u!1 &221574602
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 221574604}
+  - component: {fileID: 221574603}
+  - component: {fileID: 221574605}
+  m_Layer: 0
+  m_Name: Dice Roller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &221574603
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221574602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8e242268f696604d8aa010c897d5429, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DiceCollection: {fileID: 11400000, guid: ecda749b7fd219c48b7594ba99af32d9, type: 2}
+  Roller: {fileID: 221574605}
+--- !u!4 &221574604
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221574602}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &221574605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 221574602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ef0eb88fa93452c894829929325337b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DiceRollScene: Assets/Scenes/DiceRoll.unity
+  CurrentlyRollingDice: []
+  LastRolledDice: []
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -416,7 +478,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1276,6 +1338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1595a601c0494d2d89c1c92e66bb2cc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fromCode: {fileID: 221574603}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1284,3 +1347,4 @@ SceneRoots:
   - {fileID: 705507995}
   - {fileID: 1749721760}
   - {fileID: 1045955847}
+  - {fileID: 221574604}

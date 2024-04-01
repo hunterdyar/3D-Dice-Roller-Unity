@@ -21,5 +21,11 @@ namespace HDyar.DiceRoller
 			Debug.LogWarning($"Unable To Get {numFaces} sided dice.",this);
 			return null;
 		}
+
+		public bool TryGetDicePrefab(int numFaces, out Dice prefab)
+		{
+			prefab = GetDicePrefab(numFaces);
+			return prefab != null;
+		}
 	}
 }

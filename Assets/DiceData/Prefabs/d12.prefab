@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 486704253522505063}
   - component: {fileID: 5689026919905688046}
   - component: {fileID: 622694473737473909}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: d12
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 9050669053064759613}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 14.2, y: -0, z: 0.15}
-  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -175,3 +175,4 @@ MonoBehaviour:
     ModelNormal: {x: -0.52573097, y: -0.000000059604645, z: 0.85065085}
   currentUpFace: {fileID: 0}
   stillTime: 0
+  isStill: 0
