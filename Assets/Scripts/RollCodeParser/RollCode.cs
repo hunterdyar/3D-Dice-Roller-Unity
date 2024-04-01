@@ -28,7 +28,8 @@ namespace HDyar.DiceRoller.RollCodeParser
 			for (int i = 0; i < s.Length; i++)
 			{
 				var c = s[i];
-				if (c == ' ' || c == '\n' || c == '\t' || c == '\r')
+				//, is just a seperator. You can comma-deparate rolls "1d6,2d20" or "1d6+2d20" or "1d6 2d20" will all work (although the + will parse differently)
+				if (c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == ',')
 				{
 					continue;
 				}else if ("0123456789".Contains(c))
