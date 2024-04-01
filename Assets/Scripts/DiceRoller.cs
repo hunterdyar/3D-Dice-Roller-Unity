@@ -16,19 +16,12 @@ public class DiceRoller : MonoBehaviour
         var roll = new RollCode(code);
         foreach (var exp in roll.Expression)
         {
-            if (exp is DiceRollExpression dre)
-            {
-                RollDice(dre);
-            }else if (exp is ModifierExpression mod)
-            {
-                
-            }
+            //Evaluate the roll.
+            var e = new Evaluator();
+            var result = e.Evaluate(roll);
+            Debug.Log($"Result: {result.Total}");
         }
     }
 
-    private void RollDice(DiceRollExpression dre)
-    {
-        throw new System.NotImplementedException();
-    }
 }
 }

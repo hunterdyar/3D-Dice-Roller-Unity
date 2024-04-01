@@ -2,10 +2,9 @@
 {
 	public abstract class Expression
 	{
-	//	GetValue
-	public override string ToString()
-	{
-		return "";
-	}
+		public override string ToString()
+		{
+			return "";
+		}
 	}
 }

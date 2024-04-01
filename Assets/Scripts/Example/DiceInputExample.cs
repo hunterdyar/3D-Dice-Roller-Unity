@@ -23,6 +23,10 @@ namespace HDyar.DiceRoller.Example
 		public void Roll(string code)
 		{
 			var roll = new RollCode(code);
+			var e = new Evaluator();
+			var result = e.Evaluate(roll);
+			Debug.Log($"Result: {result.Total}");
+			
 		}
 	}
 }

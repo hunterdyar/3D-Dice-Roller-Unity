@@ -44,7 +44,6 @@ namespace HDyar.DiceRoller.RollCodeParser
 				case RollTokenType.Number:
 					var n = ParseNumberToken();
 					return n;	
-					break;
 				case RollTokenType.Add:
 				case RollTokenType.Divide:
 				case RollTokenType.Multiply:
