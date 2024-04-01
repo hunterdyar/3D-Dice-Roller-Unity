@@ -15,11 +15,6 @@ namespace HDyar.DiceRoller.Example
 			_inputField.onSubmit.AddListener(Roll);	
 		}
 
-		private void OnEnable()
-		{
-			
-		}
-
 		public void Roll()
 		{
 			Roll(_inputField.text);	
@@ -28,7 +23,6 @@ namespace HDyar.DiceRoller.Example
 		public void Roll(string code)
 		{
 			var roll = new RollCode(code);
-			
 		}
 	}
 }

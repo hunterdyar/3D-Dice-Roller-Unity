@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using HDyar.DiceRoller.RollCodeParser;
 using UnityEngine;
 
 namespace HDyar.DiceRoller
@@ -7,16 +8,27 @@ namespace HDyar.DiceRoller
     
 public class DiceRoller : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public DiceCollection DiceCollection;
+
+    private int total;
+    public void Roll(string code)
     {
-        
+        var roll = new RollCode(code);
+        foreach (var exp in roll.Expression)
+        {
+            if (exp is DiceRollExpression dre)
+            {
+                RollDice(dre);
+            }else if (exp is ModifierExpression mod)
+            {
+                
+            }
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void RollDice(DiceRollExpression dre)
     {
-        
+        throw new System.NotImplementedException();
     }
 }
 }

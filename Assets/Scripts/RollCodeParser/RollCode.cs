@@ -8,17 +8,24 @@ namespace HDyar.DiceRoller.RollCodeParser
 	public class RollCode
 	{
 		private string code;
-		public List<Expression> Expression { get; set; }
+		public List<Expression> Expression => _parser.Expressions; 
 		private List<Token> _tokens;
 		private DiceCodeParser _parser;
+		
+		delegate int RollDiceDelegate(DiceRollExpression dre);
 		public RollCode(string code)
 		{
 			this.code = code;
 			var tokens = Tokenize(code);
 			_parser = new DiceCodeParser(tokens);
 			_parser.Parse();
-			Debug.Log("Parsed as:");
-			Debug.Log(_parser.ToString());
+			Debug.Log($"Parsed as: {_parser.ToString()}");
+		}
+
+		public void Evaluate()
+		{
+			//parse through tree and pass in appropriate delegate to handle different types of functions? 
+			//chain the callbacks along or have a master callback that sorts?
 		}
 
 		private List<Token> Tokenize(string s)
@@ -28,7 +35,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 			for (int i = 0; i < s.Length; i++)
 			{
 				var c = s[i];
-				//, is just a seperator. You can comma-deparate rolls "1d6,2d20" or "1d6+2d20" or "1d6 2d20" will all work (although the + will parse differently)
+				//, is just a seperator. You can comma-separate rolls "1d6,2d20" or "1d6+2d20" or "1d6 2d20" will all work (although the + will parse differently)
 				if (c == ' ' || c == '\n' || c == '\t' || c == '\r' || c == ',')
 				{
 					continue;
@@ -73,7 +80,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 				}
 				else
 				{
-					Debug.LogError($"Unknown Character {c}");
+					Debug.LogError($"Unexpected character {c}");
 					continue;
 				}
 			}

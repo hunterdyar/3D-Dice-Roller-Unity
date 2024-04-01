@@ -9,7 +9,6 @@ namespace HDyar.DiceRoller
 		[SerializeField]
 		private int _value;
 		
-		
 		//Want special faces? random faces? Icons? Etc etc. Data about them can live here.
 	}
 }
