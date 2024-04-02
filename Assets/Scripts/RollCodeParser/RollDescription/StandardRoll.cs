@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Text;
+using Unity.VisualScripting;
 
 namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 {
@@ -33,6 +35,44 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 				current.Add(staticModifier);
 				Modifiers = current.ToArray();
 			}
+		}
+
+		public int GetResult()
+		{
+			int result = 0;
+			foreach (var droll in DiceRolls)
+			{
+				result += droll.GetResult();
+			}
+
+			if (Modifiers != null)
+			{
+				foreach (var mod in Modifiers)
+				{
+					result += mod.GetResult();
+				}
+			}
+
+			return result;
+		}
+
+		public string GetResultString()
+		{
+			StringBuilder result = new StringBuilder();
+			foreach (var droll in DiceRolls)
+			{
+				result = result.Append(droll.GetResultString());
+			}
+
+			if (Modifiers != null)
+			{
+				foreach (var mod in Modifiers)
+				{
+					result = result.Append(mod.GetResultString());
+				}
+			}
+
+			return $"{result.ToString()} = {GetResult().ToString()}";
 		}
 	}
 }

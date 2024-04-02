@@ -13,6 +13,8 @@ public class RollDiceFromCode : MonoBehaviour
     public DiceCollection DiceCollection;
     public DiceRoller Roller;
     public bool IsRolling => true;
+
+    public delegate void ResultDelegate(int result);
     public void Roll(string code)
     {
         StartCoroutine(DoRoll(code));
@@ -26,12 +28,14 @@ public class RollDiceFromCode : MonoBehaviour
         {
             foreach (var droll in rollGroup.DiceRollDescriptions)
             {
-                yield return StartCoroutine(RollDice(droll.numberTimesToRoll, droll.numberSides));
+                yield return StartCoroutine(RollDice(droll.numberTimesToRoll, droll.numberSides, droll.GetRollResultTotal));
             }
         }
+        
+        Debug.Log(rollcode.Roll.GetResultString());
     }
 
-    public IEnumerator RollDice(int dice, int faceCount) 
+    public IEnumerator RollDice(int dice, int faceCount, ResultDelegate onComplete) 
     {
         List<Dice> DiceToRoll = new List<Dice>();
         for (int i = 0; i < dice; i++)
@@ -52,7 +56,8 @@ public class RollDiceFromCode : MonoBehaviour
         
         
        yield return StartCoroutine(Roller.DoRollDice(DiceToRoll));
-       Debug.Log(Roller.LastRolledDice.Sum(x=>x.currentUpFace.Value));
+       int rollerTotal = Roller.LastRolledDice.Sum(x=>x.currentUpFace.Value);
+       onComplete?.Invoke(rollerTotal);
     }
 }
 }
