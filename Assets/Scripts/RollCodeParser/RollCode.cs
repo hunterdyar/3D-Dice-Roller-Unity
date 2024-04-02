@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using HDyar.DiceRoller.RollCodeParser.RollDescription;
 using UnityEngine;
 
 namespace HDyar.DiceRoller.RollCodeParser
@@ -11,7 +12,8 @@ namespace HDyar.DiceRoller.RollCodeParser
 		public List<Expression> Expression => _parser.Expressions; 
 		private List<Token> _tokens;
 		private DiceCodeParser _parser;
-		
+		private Evaluator _evaluator;
+		public StandardRoll Roll;
 		delegate int RollDiceDelegate(DiceRollExpression dre);
 		public RollCode(string code)
 		{
@@ -19,6 +21,8 @@ namespace HDyar.DiceRoller.RollCodeParser
 			var tokens = Tokenize(code);
 			_parser = new DiceCodeParser(tokens);
 			_parser.Parse();
+			_evaluator = new Evaluator();
+			Roll = _evaluator.Evaluate(_parser.Expressions);
 			Debug.Log($"Parsed as: {_parser.ToString()}");
 		}
 

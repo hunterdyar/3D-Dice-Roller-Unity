@@ -8,7 +8,7 @@ using Random = System.Random;
 namespace HDyar.DiceRoller
 {
     
-public class RollDiceFromCode : MonoBehaviour, IDiceRoller
+public class RollDiceFromCode : MonoBehaviour 
 {
     public DiceCollection DiceCollection;
     public DiceRoller Roller;
@@ -20,30 +20,19 @@ public class RollDiceFromCode : MonoBehaviour, IDiceRoller
 
     public IEnumerator DoRoll(string code)
     {
-        var roll = new RollCode(code);
-
-        var e = new Evaluator(this,this);//Rolldice will get called, it will update isRolling
-        var result = e.Evaluate(roll);
-
-        while (result.IsRolling())
+        var rollcode = new RollCode(code);
+        
+        foreach (var rollGroup in rollcode.Roll.DiceRolls)
         {
-            yield return null;
+            foreach (var droll in rollGroup.DiceRollDescriptions)
+            {
+                yield return StartCoroutine(RollDice(droll.numberTimesToRoll, droll.numberSides));
+            }
         }
-
-       
-        Debug.Log(result.Total);
     }
 
-    // public void RollDice(int dice, int faceCount, DiceResult result)
-    // {
-    //     Coroutine c = this.StartCoroutine(DoRollDice(dice, faceCount, result));
-    //     //this doesn't work because coroutines need to be on the main thread.
-    // }
-
-
-    public IEnumerator RollDice(int dice, int faceCount, DiceResult result)
+    public IEnumerator RollDice(int dice, int faceCount) 
     {
-        result.ActiveRolls++;
         List<Dice> DiceToRoll = new List<Dice>();
         for (int i = 0; i < dice; i++)
         {
@@ -55,28 +44,15 @@ public class RollDiceFromCode : MonoBehaviour, IDiceRoller
             {
                 //no sim dice, just invent a number i guess?
                 int r = UnityEngine.Random.Range(1, faceCount + 1);
-                result.AddRoll(r, faceCount);
+                //uh...
             }
         }
 
-        bool rolling = false;
-        Roller.OnRollComplete += results =>
-        {
-            rolling = true;
-            foreach (var roll in results)
-            {
-                result.AddRoll(roll.currentUpFace.Value, roll.Sides);
-            }
-        };
+        bool rolling = true;
         
-        Roller.RollDice(DiceToRoll);
         
-        while (rolling)
-        {
-            yield return null;
-        }
-
-        result.ActiveRolls--; 
+       yield return StartCoroutine(Roller.DoRollDice(DiceToRoll));
+       Debug.Log(Roller.LastRolledDice.Sum(x=>x.currentUpFace.Value));
     }
 }
 }

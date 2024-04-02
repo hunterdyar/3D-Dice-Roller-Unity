@@ -470,7 +470,7 @@ GameObject:
   - component: {fileID: 1457812574}
   - component: {fileID: 1457812575}
   m_Layer: 6
-  m_Name: Colliders
+  m_Name: World
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -511,11 +511,10 @@ MonoBehaviour:
   camera: {fileID: 849760876}
   depth: 20
   spawnHeightAboveDepth: 18
-  bounds:
-    m_Center: {x: 0, y: -0.0000011920929, z: -4.999756}
-    m_Extent: {x: 4.935065, y: 5, z: -5.000001}
+  shadowCatcherCube: {fileID: 5191830443016909474, guid: b6c2a07fc7490f64a87d357fd645c77b, type: 3}
   DiceSpawnPoints: []
   DiceSpawnPointGridSize: {x: 10, y: 10}
+  _colliderMat: {fileID: 0}
 --- !u!1 &1729492609
 GameObject:
   m_ObjectHideFlags: 0

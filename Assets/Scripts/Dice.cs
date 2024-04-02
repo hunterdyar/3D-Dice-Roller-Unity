@@ -24,7 +24,7 @@ namespace HDyar.DiceRoller
 		private DiceFace highestValueFace; 
 		[SerializeField] private float stillTime;
 		private float _currentstillTime;
-		public bool isStill;
+		public bool isStill = false;
 		private void Awake()
 		{
 			_rigidbody = GetComponent<Rigidbody>();
@@ -69,12 +69,14 @@ namespace HDyar.DiceRoller
 						//is it worth it to cache the orientation and only start checking again if it changes?
 						_currentstillTime = 0;
 						isStill = true;
+						GetComponent<MeshRenderer>().material.color = Color.gray;
 					}
 				}
 				else
 				{
 					isStill = false;
 					_currentstillTime = 0;
+					GetComponent<MeshRenderer>().material.color = Color.white;
 				}
 			}
 

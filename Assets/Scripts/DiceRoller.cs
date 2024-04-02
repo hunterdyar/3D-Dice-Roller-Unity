@@ -24,7 +24,11 @@ namespace HDyar.DiceRoller
 			StartCoroutine(DoRollDice(diceToRoll));
 		}
 
-		private IEnumerator DoRollDice(List<Dice> diceToRoll)
+		public bool IsRolling()
+		{
+			return CurrentlyRollingDice.Any(x => !x.isStill);
+		}
+		public IEnumerator DoRollDice(List<Dice> diceToRoll)
 		{
 			if (!SceneManager.GetSceneByPath(DiceRollScene).IsValid())
 			{

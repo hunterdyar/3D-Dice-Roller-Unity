@@ -10,15 +10,16 @@ namespace HDyar.DiceRoller
 	public class DiceWorldCreator : MonoBehaviour
 	{
 		[SerializeField]
-		private Camera camera;
+		private new Camera camera;
 		public float depth;
 		public float spawnHeightAboveDepth;
-		public Bounds bounds;
-
+		public GameObject shadowCatcherCube;
+		
 		public List<Transform> DiceSpawnPoints;
 		
 		public Vector2Int DiceSpawnPointGridSize = new Vector2Int(10,10);
-		//todo: use unique physics scene option. in roller, i guess.
+
+		public PhysicMaterial _colliderMat;
 
 		private void Start()
 		{
@@ -83,7 +84,6 @@ namespace HDyar.DiceRoller
 			var center = Vector3.Lerp(bottomLeftW, topRightW, .5f);
 			var size = topRightW - bottomLeftW;
 			size = new Vector3(Mathf.Abs(size.x), Mathf.Abs(size.y), Mathf.Abs(size.z));
-			bounds = new Bounds(center, size);
 			
 			//create floor
 			var f = new GameObject().AddComponent<BoxCollider>();
@@ -91,7 +91,13 @@ namespace HDyar.DiceRoller
 			f.transform.SetParent(transform);
 			f.transform.localPosition = Vector3.forward * depth;
 			f.center = new Vector3(0,-thick/2,0);
-			f.size = new Vector3(size.x+thick,thick,size.z*2+thick);
+			f.size = new Vector3(size.x+thick,thick,size.z+thick);
+			f.material = _colliderMat;
+			
+			var shadow=Instantiate(shadowCatcherCube, transform);
+			shadow.transform.localPosition = f.transform.localPosition;
+			shadow.transform.localPosition += f.center;
+			shadow.transform.localScale = f.size;
 			
 			//ceiling
 			var c = new GameObject().AddComponent<BoxCollider>();
@@ -99,7 +105,7 @@ namespace HDyar.DiceRoller
 			c.transform.SetParent(transform);
 			c.transform.localPosition = new Vector3(0,0,camera.nearClipPlane);//thickness means we stay half a unit away.
 			c.center = new Vector3(0,thick/2,0);
-			c.size = new Vector3(size.x+thick,thick,size.z*2+thick);
+			c.size = new Vector3(size.x+thick,thick,size.z+thick);
 			
 			//Create Walls
 			var right = new GameObject().AddComponent<BoxCollider>();
@@ -107,14 +113,14 @@ namespace HDyar.DiceRoller
 			right.transform.SetParent(transform);
 			right.transform.localPosition = Vector3.forward * depth / 2 + Vector3.right * size.x / 2;
 			right.center = new Vector3(thick / 2, 0, 0);
-			right.size = new Vector3(thick, size.y, size.z*2+thick);
+			right.size = new Vector3(thick, size.y, size.z+thick);
 			
 			var left = new GameObject().AddComponent<BoxCollider>(); 
 			left.gameObject.name = "left"; 
 			left.transform.SetParent(transform); 
 			left.transform.localPosition = Vector3.forward * depth / 2 + Vector3.left * size.x / 2; 
 			left.center = new Vector3(-thick / 2, 0, 0); 
-			left.size = new Vector3(thick, size.y, size.z*3+thick);
+			left.size = new Vector3(thick, size.y, size.z+thick);
 
 			var up = new GameObject().AddComponent<BoxCollider>();
 			up.gameObject.name = "up";
