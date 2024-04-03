@@ -8,6 +8,8 @@
 		Add,
 		Subtract,
 		Multiply,
-		Divide
+		Divide,
+		Keep,
+		Explode,
 	}
 }

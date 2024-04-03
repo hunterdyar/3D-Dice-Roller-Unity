@@ -4,23 +4,23 @@ using System.Linq;
 namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 {
 	[System.Serializable]
-	public class SingleDiceRollDescription
+	public class SingleRollDescription
 	{
 		//Serializable Roll Description
 		public int numberTimesToRoll;
 		public int numberSides;
 		public bool exploding;
-
-
+		
 		//Utility Result Storage. Not serializable, so get-only.
-		public int TotalSum() => _rolls.Sum(x => x.Item1);
-		private List<(int, int)> _rolls;
+		public List<RollResult> Rolls => _rolls;
+		public int TotalSum() => _rolls.Where(x=>!x.Dropped).Sum(x => x.Result);
+		private List<RollResult> _rolls;
 
-		public SingleDiceRollDescription(int times, int sides)
+		public SingleRollDescription(int times, int sides, bool exploding = false)
 		{
 			numberTimesToRoll = times;
 			numberSides = sides;
-			exploding = false;
+			this.exploding = exploding;
 		}
 		
 		public string GetResultString()
@@ -42,7 +42,12 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 			// s += "(";
 			for (var index = 0; index < _rolls.Count; index++)
 			{
-				int a = _rolls[index].Item1;
+				var d = _rolls[index].Dropped;
+				if (d)
+				{
+					s += "<s>";
+				}
+				int a = _rolls[index].Result;
 				if (a > 0)
 				{
 					s += "+";
@@ -51,6 +56,11 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 				if (index < _rolls.Count - 1)
 				{
 					s += " ";
+				}
+
+				if (d)
+				{
+					s += "</s>";
 				}
 			}
 
@@ -61,12 +71,12 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 
 		public void ResetResult()
 		{
-			_rolls = new List<(int, int)>();
+			_rolls = new List<RollResult>();
 		}
 
-		public void GetRollResultByDice(int result, int faces)
+		public void GetRollResultByDice(int result, int faces, bool exploded = false)
 		{
-			_rolls.Add((result,faces));
+			_rolls.Add(new RollResult(result,faces, false, exploded));
 		}
 	}
 }

@@ -51,12 +51,54 @@ namespace HDyar.DiceRoller.RollCodeParser
 					return ParseModifierToken();
 				case RollTokenType.DiceSep:
 					return ParseDiceToken();
+				case RollTokenType.Explode:
+					return ParseExplodeToken();
+				case RollTokenType.Keep:
+					return ParseKeepToken();
 			}
 
 			return null;
 		}
 
-		private Expression ParseDiceToken()
+		private Expression ParseKeepToken()
+		{
+			var left = PopLeftExpressionOrError();
+			if (left is DiceRollExpression dre)
+			{
+				_pos++;
+				dre.Keep = ParseNextToken();
+				return dre;
+			}
+			else
+			{
+				//todo: exploding groups.
+			}
+
+			Debug.LogError("Keep token in bad location. ");
+			_pos++;
+			return left;
+		}
+
+		private Expression ParseExplodeToken()
+		{
+			var left = PopLeftExpressionOrError();
+			if (left is DiceRollExpression dre)
+			{
+				dre.Exploding = true;
+				_pos++;
+				return dre;
+			}
+			else
+			{
+				//todo: exploding groups.
+				Debug.LogError("Exploding token in bad location.");
+			}
+
+			_pos++;
+			return left;
+		}
+
+		private Expression PopLeftExpressionOrError()
 		{
 			//get previous expression
 			Expression left;
@@ -72,8 +114,24 @@ namespace HDyar.DiceRoller.RollCodeParser
 			{
 				left = Expressions[^1];
 				Expressions.Remove(left);
+				return left;
 			}
 
+			Debug.LogError("Unable to pull left expression! invalid syntax.");
+			return null;
+		}
+		private Expression ParseDiceToken()
+		{
+
+			Expression left = PopLeftExpressionOrError();
+			//2d20d2 is roll 2d20 and drop the lowest 2 results.
+			if (left is DiceRollExpression existingDRE)
+			{
+				_pos++;
+				existingDRE.Drop = ParseNextToken();
+				return existingDRE;
+			}
+			
 			var dre = new DiceRollExpression();
 			//consume the sep
 			_pos++;

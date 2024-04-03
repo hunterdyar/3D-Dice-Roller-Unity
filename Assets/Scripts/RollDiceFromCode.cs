@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using HDyar.DiceRoller.RollCodeParser;
+using TMPro;
 using UnityEngine;
 using Random = System.Random;
 
@@ -13,8 +14,9 @@ public class RollDiceFromCode : MonoBehaviour
     public DiceCollection DiceCollection;
     public DiceRoller Roller;
     public bool IsRolling => true;
+    public TMP_Text resultText;
 
-    public delegate void ResultDelegate(int result, int faces);
+    public delegate void ResultDelegate(int result, int faces, bool exploded=false);
     public void Roll(string code)
     {
         StartCoroutine(DoRoll(code));
@@ -23,7 +25,7 @@ public class RollDiceFromCode : MonoBehaviour
     public IEnumerator DoRoll(string code)
     {
         var rollcode = new RollCode(code);
-        
+        resultText.text = "...";
         foreach (var rollGroup in rollcode.Roll.DiceRolls)
         {
             foreach (var droll in rollGroup.DiceRollDescriptions)
@@ -33,7 +35,7 @@ public class RollDiceFromCode : MonoBehaviour
             }
         }
         
-        Debug.Log(rollcode.Roll.GetResultString());
+        resultText.text = rollcode.Roll.GetResultString();
     }
 
     public IEnumerator RollDice(int dice, int faceCount, ResultDelegate onRollComplete) 

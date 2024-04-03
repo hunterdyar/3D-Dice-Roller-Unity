@@ -29,7 +29,9 @@ namespace HDyar.DiceRoller.RollCodeParser
 			{
 				var numDice = GetValueFromExpression(dre.NumberDice);
 				var numFaces = GetValueFromExpression(dre.NumberFaces);
-				GroupOfDiceDescription group = new GroupOfDiceDescription(numDice,numFaces);
+				int drop = GetValueFromExpression(dre.Drop);
+				int keep = GetValueFromExpression(dre.Keep);
+				GroupOfDiceDescription group = new GroupOfDiceDescription(numDice,numFaces, drop,keep, dre.Exploding);
 				roll.AppendGroup(group);
 			}else if (exp is ModifierExpression mod)
 			{
@@ -62,6 +64,12 @@ namespace HDyar.DiceRoller.RollCodeParser
 
 		public int GetValueFromExpression(Expression exp)
 		{
+			if (exp == null)
+			{
+				//This is valid for drop and keep items - if we don't have them, they'll be null!
+				return 0;
+			}
+			
 			if (exp is NumberExpression ne)
 			{
 				return ne.Value;

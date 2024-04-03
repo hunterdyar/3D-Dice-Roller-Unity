@@ -81,6 +81,15 @@ namespace HDyar.DiceRoller.RollCodeParser
 				{
 					tokens.Add(new Token(RollTokenType.Divide,c));
 					continue;
+				}else if (c == 'k')
+				{
+					tokens.Add(new Token(RollTokenType.Keep,c));
+					continue;
+				}
+				else if (c == '!')
+				{
+					tokens.Add(new Token(RollTokenType.Explode, c));
+					continue;
 				}
 				else
 				{
