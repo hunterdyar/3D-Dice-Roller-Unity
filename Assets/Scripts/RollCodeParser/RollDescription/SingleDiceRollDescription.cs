@@ -1,4 +1,7 @@
-﻿namespace HDyar.DiceRoller.RollCodeParser.RollDescription
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 {
 	[System.Serializable]
 	public class SingleDiceRollDescription
@@ -10,8 +13,8 @@
 
 
 		//Utility Result Storage. Not serializable, so get-only.
-		public int TotalSum => _total;
-		private int _total;
+		public int TotalSum() => _rolls.Sum(x => x.Item1);
+		private List<(int, int)> _rolls;
 
 		public SingleDiceRollDescription(int times, int sides)
 		{
@@ -19,24 +22,51 @@
 			numberSides = sides;
 			exploding = false;
 		}
-
-		public void GetRollResultTotal(int total)
-		{
-			this._total = total;
-		}
-
+		
 		public string GetResultString()
 		{
-			if (_total >= 0)
+			int total = TotalSum();
+			string s = "";
+
+			if (_rolls.Count == 0)
 			{
-				//+1
-				return $"+{_total}";
+				return "+0";
 			}
-			else
+
+			// if (_rolls.Count == 1)
+			// {
+			// 	s += _rolls[0].Item1;
+			// 	return s;
+			// }
+
+			// s += "(";
+			for (var index = 0; index < _rolls.Count; index++)
 			{
-				//-1
-				return _total.ToString();
+				int a = _rolls[index].Item1;
+				if (a > 0)
+				{
+					s += "+";
+				}
+				s += a;
+				if (index < _rolls.Count - 1)
+				{
+					s += " ";
+				}
 			}
+
+			// s += ")";
+
+			return s;
+		}
+
+		public void ResetResult()
+		{
+			_rolls = new List<(int, int)>();
+		}
+
+		public void GetRollResultByDice(int result, int faces)
+		{
+			_rolls.Add((result,faces));
 		}
 	}
 }

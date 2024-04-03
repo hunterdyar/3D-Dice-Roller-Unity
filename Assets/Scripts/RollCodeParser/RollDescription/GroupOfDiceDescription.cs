@@ -12,7 +12,7 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		public int SumMultiplier;//set to -1 for subtract.
 		public SingleDiceRollDescription[] DiceRollDescriptions;
 
-		public int GetSumPreMult() => DiceRollDescriptions.Sum(x => x.TotalSum);
+		public int GetSumPreMult() => DiceRollDescriptions.Sum(x => x.TotalSum());
 		public GroupOfDiceDescription(SingleDiceRollDescription[] rolls, int SumMultiplier = 1)
 		{
 			this.SumMultiplier = 1;

@@ -15,7 +15,6 @@ namespace HDyar.DiceRoller
 	{
 		[ScenePath, SerializeField]
 		private string DiceRollScene;
-		public Action<Dice[]> OnRollComplete;
 		public Dice[] CurrentlyRollingDice;
 		public List<Dice> LastRolledDice;
 		private DiceWorldCreator _worldCreator;
@@ -75,7 +74,6 @@ namespace HDyar.DiceRoller
 			}
 
 			LastRolledDice = CurrentlyRollingDice.ToList();//we bout to delete these tho.
-			OnRollComplete?.Invoke(CurrentlyRollingDice);
 		}
 	}
 }

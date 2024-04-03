@@ -14,7 +14,7 @@ public class RollDiceFromCode : MonoBehaviour
     public DiceRoller Roller;
     public bool IsRolling => true;
 
-    public delegate void ResultDelegate(int result);
+    public delegate void ResultDelegate(int result, int faces);
     public void Roll(string code)
     {
         StartCoroutine(DoRoll(code));
@@ -28,14 +28,15 @@ public class RollDiceFromCode : MonoBehaviour
         {
             foreach (var droll in rollGroup.DiceRollDescriptions)
             {
-                yield return StartCoroutine(RollDice(droll.numberTimesToRoll, droll.numberSides, droll.GetRollResultTotal));
+                droll.ResetResult();
+                yield return StartCoroutine(RollDice(droll.numberTimesToRoll, droll.numberSides, droll.GetRollResultByDice));
             }
         }
         
         Debug.Log(rollcode.Roll.GetResultString());
     }
 
-    public IEnumerator RollDice(int dice, int faceCount, ResultDelegate onComplete) 
+    public IEnumerator RollDice(int dice, int faceCount, ResultDelegate onRollComplete) 
     {
         List<Dice> DiceToRoll = new List<Dice>();
         for (int i = 0; i < dice; i++)
@@ -57,7 +58,12 @@ public class RollDiceFromCode : MonoBehaviour
         
        yield return StartCoroutine(Roller.DoRollDice(DiceToRoll));
        int rollerTotal = Roller.LastRolledDice.Sum(x=>x.currentUpFace.Value);
-       onComplete?.Invoke(rollerTotal);
+       
+       //todo: move this into Dice callback so the results come in over time. Fun for exploding to see number go up.
+       foreach (var d in Roller.LastRolledDice)
+       {
+           onRollComplete?.Invoke(d.currentUpFace.Value,d.Sides);
+       }
     }
 }
 }

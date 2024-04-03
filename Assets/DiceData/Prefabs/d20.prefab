@@ -190,5 +190,5 @@ MonoBehaviour:
   - Face: {fileID: 11400000, guid: 28db5bc8c18108b499168b467e4aeb28, type: 2}
     ModelNormal: {x: 0.9341722, y: -0.0000002682209, z: -0.35682237}
   currentUpFace: {fileID: 11400000, guid: d3509c18d5c14db45858d1128153e702, type: 2}
-  stillTime: 0
+  stillTime: 0.1
   isStill: 0
