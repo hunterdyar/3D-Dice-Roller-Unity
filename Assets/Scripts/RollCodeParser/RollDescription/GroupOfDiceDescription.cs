@@ -36,7 +36,7 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		{
 			DiceRollDescriptions = new SingleRollDescription[] { new SingleRollDescription(numDice, sides) };
 			SumMultiplier = 1;
-			exploding = exploding;
+			this.exploding = exploding;
 			keepHighest = drop;
 			dropLowest = keep;
 		}

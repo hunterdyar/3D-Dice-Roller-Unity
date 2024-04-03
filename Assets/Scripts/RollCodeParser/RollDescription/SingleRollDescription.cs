@@ -30,7 +30,7 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 
 			if (_rolls.Count == 0)
 			{
-				return "+0";
+				return "0";
 			}
 
 			// if (_rolls.Count == 1)
@@ -50,7 +50,7 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 				int a = _rolls[index].Result;
 				if (a > 0)
 				{
-					s += "+";
+					//s += "+";
 				}
 				s += a;
 				if (index < _rolls.Count - 1)
