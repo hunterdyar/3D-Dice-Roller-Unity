@@ -15,6 +15,8 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		public int keepHighest=0;
 		public int dropLowest=0;
 		private bool exploding = false;
+		public string Label;
+
 		public int TotalRolls() => DiceRollDescriptions.Sum(x => x.numberTimesToRoll);
 		public int GetSumPreMult() => DiceRollDescriptions.Sum(x => x.TotalSum());
 		public GroupOfDiceDescription(SingleRollDescription[] rolls, int SumMultiplier = 1)

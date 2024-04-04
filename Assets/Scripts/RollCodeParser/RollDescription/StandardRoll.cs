@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Text;
 using Unity.VisualScripting;
 
@@ -9,8 +10,8 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 	/// </summary>
 	public class StandardRoll
 	{
-		public GroupOfDiceDescription[] DiceRolls;
-		public StaticModifier[] Modifiers;
+		public GroupOfDiceDescription[] DiceRolls = Array.Empty<GroupOfDiceDescription>();
+		public StaticModifier[] Modifiers = Array.Empty<StaticModifier>();
 
 		public void AppendGroup(GroupOfDiceDescription group)
 		{

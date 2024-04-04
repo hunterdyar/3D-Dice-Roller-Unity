@@ -79,12 +79,6 @@ namespace HDyar.DiceRoller
 					GetComponent<MeshRenderer>().material.color = Color.white;
 				}
 			}
-
-			if (Input.GetKeyDown(KeyCode.Space))
-			{
-				_rigidbody.AddForce(Vector3.up*2,ForceMode.Impulse);
-				Roll(Random.onUnitSphere,Random.insideUnitSphere);
-			}
 		}
 
 		public void Roll(Vector3 throwForce, Vector3 spinForce)

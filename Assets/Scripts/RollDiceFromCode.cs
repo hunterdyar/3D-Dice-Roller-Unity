@@ -55,11 +55,7 @@ public class RollDiceFromCode : MonoBehaviour
             }
         }
 
-        bool rolling = true;
-        
-        
        yield return StartCoroutine(Roller.DoRollDice(DiceToRoll));
-       int rollerTotal = Roller.LastRolledDice.Sum(x=>x.currentUpFace.Value);
        
        //todo: move this into Dice callback so the results come in over time. Fun for exploding to see number go up.
        foreach (var d in Roller.LastRolledDice)

@@ -11,5 +11,8 @@
 		Divide,
 		Keep,
 		Explode,
+		LabelOpen,
+		LabelClose,
+		StringLiteral,
 	}
 }

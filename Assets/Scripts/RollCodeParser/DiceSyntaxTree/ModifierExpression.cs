@@ -11,6 +11,7 @@
 	
 	public class ModifierExpression : Expression
 	{
+		public string Label;
 		public Modifier Modifier;
 		public Expression Expression;
 

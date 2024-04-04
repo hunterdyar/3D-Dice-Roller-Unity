@@ -32,15 +32,16 @@ namespace HDyar.DiceRoller.RollCodeParser
 				int drop = GetValueFromExpression(dre.Drop);
 				int keep = GetValueFromExpression(dre.Keep);
 				GroupOfDiceDescription group = new GroupOfDiceDescription(numDice,numFaces, drop,keep, dre.Exploding);
+				group.Label = dre.Label;
 				roll.AppendGroup(group);
 			}else if (exp is ModifierExpression mod)
 			{
 				if (mod.Modifier == Modifier.Add)
 				{
-					roll.AppendModifier(new StaticModifier(GetValueFromExpression(mod.Expression)));
+					roll.AppendModifier(new StaticModifier(GetValueFromExpression(mod.Expression),mod.Label));
 				}else if (mod.Modifier == Modifier.Subtract)
 				{
-					roll.AppendModifier(new StaticModifier(0- GetValueFromExpression(mod.Expression)));
+					roll.AppendModifier(new StaticModifier(0- GetValueFromExpression(mod.Expression),mod.Label));
 				}
 				else
 				{
@@ -49,6 +50,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 				}
 			}else if (exp is ExpressionGroup group)
 			{
+				//label
 				throw new NotImplementedException("Expression Groups not yet supported");
 			}
 			else
@@ -79,7 +81,6 @@ namespace HDyar.DiceRoller.RollCodeParser
 				//todo: We have to yield here!
 				//we need to make some kind of ... thing for this...
 				throw new ArgumentException("Not supporting expressions that aren't numbers, yet.");
-				return 0;
 			}
 		}
 	}

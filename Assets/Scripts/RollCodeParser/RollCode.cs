@@ -52,6 +52,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 						{
 							nt.RecalculateValue();
 						}
+
 						continue;
 					}
 					else
@@ -60,39 +61,55 @@ namespace HDyar.DiceRoller.RollCodeParser
 						tokens.Add(t);
 						continue;
 					}
-				}else if (c == 'd')
+				}else if (c == '[')
 				{
-					var t = new Token(RollTokenType.DiceSep, c);
-					tokens.Add(t);
+					//Eat up a label! yum.
+					tokens.Add(new Token(RollTokenType.LabelOpen,c));
+					string literal = "";
+					i++;//consume the [
+					for (; s[i] != ']' && i < s.Length; i++)
+					{
+						literal += s[i];
+					}
+					tokens.Add(new Token(RollTokenType.StringLiteral,literal));
+					tokens.Add(new Token(RollTokenType.LabelClose,s[i]));
 					continue;
-				}else if (c == '+')
-				{
-					tokens.Add(new Token(RollTokenType.Add,c));
-					continue;
-				}else if (c == '-')
-				{
+				}
+
+				switch (c){
+					case 'd':
+					{
+						var t = new Token(RollTokenType.DiceSep, c);
+						tokens.Add(t);
+						continue;
+					} 
+					case '+':
+						tokens.Add(new Token(RollTokenType.Add,c));
+						continue;
+						
+					case '-':
 					tokens.Add(new Token(RollTokenType.Subtract,c));
 					continue;
-				}else if (c == 'x' || c == '*')
-				{
+				case'x': 
+				case '*':
 					tokens.Add(new Token(RollTokenType.Multiply,c));
 					continue;
-				}else if (c == '/')
-				{
+				case '/':
 					tokens.Add(new Token(RollTokenType.Divide,c));
 					continue;
-				}else if (c == 'k')
-				{
+				case 'k':
 					tokens.Add(new Token(RollTokenType.Keep,c));
 					continue;
-				}
-				else if (c == '!')
-				{
+				case '!':	
 					tokens.Add(new Token(RollTokenType.Explode, c));
 					continue;
-				}
-				else
-				{
+				case '[':
+					tokens.Add(new Token(RollTokenType.LabelOpen,c));
+					continue;
+				case ']':
+					tokens.Add(new Token(RollTokenType.LabelClose,c));
+					continue;
+				default:
 					Debug.LogError($"Unexpected character {c}");
 					continue;
 				}

@@ -7,19 +7,19 @@ namespace HDyar.DiceRoller.RollCodeParser
 {
 	public class DiceCodeParser
 	{
-		public List<Token> Tokens;
+		private readonly List<Token> _tokens;
 		public List<Expression> Expressions;
 		private int _pos;
 		public DiceCodeParser(List<Token> tokens)
 		{
-			Tokens = tokens;
+			_tokens = tokens;
 		}
 		
 		public void Parse()
 		{
 			_pos = 0;
 			Expressions = new List<Expression>();
-			while (_pos < Tokens.Count)
+			while (_pos < _tokens.Count)
 			{
 				Expressions.Add(ParseNextToken());
 			}
@@ -38,7 +38,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 
 		private Expression ParseNextToken()
 		{
-			var token = Tokens[_pos];
+			var token = _tokens[_pos];
 			switch (token.TType)
 			{
 				case RollTokenType.Number:
@@ -55,9 +55,47 @@ namespace HDyar.DiceRoller.RollCodeParser
 					return ParseExplodeToken();
 				case RollTokenType.Keep:
 					return ParseKeepToken();
+				case RollTokenType.LabelOpen:
+					return ParseLabelToken();
 			}
 
 			return null;
+		}
+
+		private Expression ParseLabelToken()
+		{
+			var left = PopLeftExpressionOrError();
+			_pos++;//consume the [
+			
+			if (_tokens[_pos].TType != RollTokenType.StringLiteral)
+			{
+				Debug.LogError("Empty label? That's not how the tokenizer should report empties.");
+			}
+			
+			if (left is ModifierExpression mod)
+			{
+				mod.Label = _tokens[_pos].Literal;
+			}else if (left is DiceRollExpression dre)
+			{
+				dre.Label = _tokens[_pos].Literal;
+			}else if (left is ExpressionGroup eg)
+			{
+				eg.Label = _tokens[_pos].Literal;
+			}
+			else
+			{
+				Debug.LogError("Invalid Label");
+			}
+
+			_pos++;
+			//eat or break
+			if (_tokens[_pos].TType != RollTokenType.LabelClose)
+			{
+				Debug.LogError("Label not closed? Bad.");
+			}
+
+			_pos++;
+			return left;
 		}
 
 		private Expression ParseKeepToken()
@@ -142,7 +180,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 
 		private Expression ParseModifierToken()
 		{
-			var token = Tokens[_pos];
+			var token = _tokens[_pos];
 			var modifier = new ModifierExpression();
 			if (token.TType == RollTokenType.Add)
 			{
@@ -165,7 +203,7 @@ namespace HDyar.DiceRoller.RollCodeParser
 
 		private Expression ParseNumberToken()
 		{
-			var token = Tokens[_pos];
+			var token = _tokens[_pos];
 			if (token is NumberToken nt)
 			{
 				var numberExpression = new NumberExpression();

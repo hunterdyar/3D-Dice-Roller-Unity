@@ -2,6 +2,7 @@
 {
 	public class DiceRollExpression : Expression
 	{
+		public string Label;
 		public Expression NumberDice;
 		public Expression NumberFaces;
 		public Expression Drop = null;
