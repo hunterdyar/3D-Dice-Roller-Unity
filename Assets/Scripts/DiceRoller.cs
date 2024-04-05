@@ -26,7 +26,7 @@ namespace HDyar.DiceRoller
 		{
 			return CurrentlyRollingDice.Any(x => !x.isStill);
 		}
-		public IEnumerator DoRollDice(List<Dice> diceToRoll)
+		public IEnumerator DoRollDice(List<Dice> diceToRoll, bool clearLastRolled = true)
 		{
 			if (!SceneManager.GetSceneByPath(DiceRollScene).IsValid())
 			{
@@ -37,11 +37,14 @@ namespace HDyar.DiceRoller
 				}
 			}
 
-			foreach (var dice in LastRolledDice)
+			if (clearLastRolled)
 			{
-				if (dice != null)
+				foreach (var dice in LastRolledDice)
 				{
-					Destroy(dice.gameObject);
+					if (dice != null)
+					{
+						Destroy(dice.gameObject);
+					}
 				}
 			}
 
@@ -72,7 +75,17 @@ namespace HDyar.DiceRoller
 				yield return null;
 			}
 
-			LastRolledDice = CurrentlyRollingDice.ToList();//we bout to delete these tho.
+			if (clearLastRolled)
+			{
+				LastRolledDice = CurrentlyRollingDice.ToList(); //we bout to delete these tho.
+			}
+			else
+			{
+				foreach (var d in CurrentlyRollingDice)
+				{
+					LastRolledDice.Add(d);
+				}
+			}
 		}
 	}
 }

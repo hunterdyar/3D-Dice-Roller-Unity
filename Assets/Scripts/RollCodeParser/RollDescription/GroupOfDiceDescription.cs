@@ -14,7 +14,7 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		public SingleRollDescription[] DiceRollDescriptions;
 		public int keepHighest=0;
 		public int dropLowest=0;
-		private bool exploding = false;
+		private ExplodeBehaviour exploding = ExplodeBehaviour.DontExplode;
 		public string Label;
 
 		public int TotalRolls() => DiceRollDescriptions.Sum(x => x.numberTimesToRoll);
@@ -29,14 +29,14 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		{
 			DiceRollDescriptions = new SingleRollDescription[]{new SingleRollDescription(numDice,sides)};
 			SumMultiplier = 1;
-			exploding = false;
+			exploding = ExplodeBehaviour.DontExplode;
 			keepHighest = 0;
 			dropLowest = 0;
 		}
 
-		public GroupOfDiceDescription(int numDice, int sides, int drop, int keep, bool exploding)
+		public GroupOfDiceDescription(int numDice, int sides, int drop, int keep, ExplodeBehaviour exploding)
 		{
-			DiceRollDescriptions = new SingleRollDescription[] { new SingleRollDescription(numDice, sides) };
+			DiceRollDescriptions = new SingleRollDescription[] { new SingleRollDescription(numDice, sides, exploding) };
 			SumMultiplier = 1;
 			this.exploding = exploding;
 			keepHighest = drop;

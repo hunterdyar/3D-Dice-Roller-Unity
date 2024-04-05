@@ -9,14 +9,14 @@ namespace HDyar.DiceRoller.RollCodeParser.RollDescription
 		//Serializable Roll Description
 		public int numberTimesToRoll;
 		public int numberSides;
-		public bool exploding;
+		public ExplodeBehaviour exploding;
 		
 		//Utility Result Storage. Not serializable, so get-only.
 		public List<RollResult> Rolls => _rolls;
 		public int TotalSum() => _rolls.Where(x=>!x.Dropped).Sum(x => x.Result);
 		private List<RollResult> _rolls;
 
-		public SingleRollDescription(int times, int sides, bool exploding = false)
+		public SingleRollDescription(int times, int sides, ExplodeBehaviour exploding = ExplodeBehaviour.DontExplode)
 		{
 			numberTimesToRoll = times;
 			numberSides = sides;

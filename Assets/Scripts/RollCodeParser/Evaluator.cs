@@ -31,7 +31,9 @@ namespace HDyar.DiceRoller.RollCodeParser
 				var numFaces = GetValueFromExpression(dre.NumberFaces);
 				int drop = GetValueFromExpression(dre.Drop);
 				int keep = GetValueFromExpression(dre.Keep);
-				GroupOfDiceDescription group = new GroupOfDiceDescription(numDice,numFaces, drop,keep, dre.Exploding);
+				//for now we only support single highest face.
+				var eb = dre.Exploding ? ExplodeBehaviour.ExplodeOnSingleHighestFace : ExplodeBehaviour.DontExplode;
+				GroupOfDiceDescription group = new GroupOfDiceDescription(numDice,numFaces, drop,keep, eb);
 				group.Label = dre.Label;
 				roll.AppendGroup(group);
 			}else if (exp is ModifierExpression mod)
