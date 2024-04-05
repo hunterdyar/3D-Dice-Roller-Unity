@@ -16,7 +16,6 @@ namespace Blooper.Utilities
 			var container = new VisualElement();
 			var sceneSelect = new PopupField<string>();
 			sceneSelect.choices = EditorBuildSettings.scenes.Select(x => x.path).ToList();
-			var pathProp = property;
 			sceneSelect.Bind(property.serializedObject);
 			sceneSelect.bindingPath = property.propertyPath;
 			sceneSelect.label = property.displayName;
@@ -25,11 +24,8 @@ namespace Blooper.Utilities
 
 			// var bpo = BuildPlayerWindow.DefaultBuildMethods.GetBuildPlayerOptions(new BuildPlayerOptions());
 			// sceneSelect.choices = bpo.scenes.ToList();
-			sceneSelect.Bind(property.serializedObject);
-
-			
-
-			sceneSelect.label = "Scene";
+			// sceneSelect.Bind(property.serializedObject);
+			// sceneSelect.label = "Scene";
 			//
 
 		}
